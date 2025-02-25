@@ -122,122 +122,200 @@ public class TemiShop {
     }
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        System.out.print("🔹 Enter Your Name: ");
-        String username = in.nextLine();
 
-        boolean isAdmin = username.equals("Amr Khaled");
+        System.out.println("🔹 Welcome to the E-Commerce System 🔹");
+        System.out.println("1️⃣ Admin");
+        System.out.println("2️⃣ Customer");
 
+        int userType;
         while (true) {
-            System.out.println("\n🔹 Welcome to the E-Commerce Store 🔹");
-            if (isAdmin) {
-                System.out.println("1️⃣ Update Product ");
-                System.out.println("2️⃣ Add Product");
-                System.out.println("3️⃣ View All Products");
-                System.out.println("4️⃣ Remove Product");
-            }
-
-            System.out.println("5️⃣ Check Product Availability ");
-            System.out.println("6️⃣ Add to Cart ");
-            System.out.println("7️⃣ Remove from Cart ");
-            System.out.println("8️⃣ View Your Cart ");
-            System.out.println("9️⃣ Calculate Total ");
-            System.out.println("0️⃣ Exit");
-
-            System.out.print("🔸 Choose an option: ");
-            int choice = in.nextInt();
-
-            if (isAdmin) {
-                if (choice == 1) {
-                    System.out.println("**Hello Admin**");
-                    System.out.print("Enter the Category of Product to Update: ");
-                    String c = in.next();
-                    System.out.print("Enter Product Name: ");
-                    String n = in.next();
-                    System.out.print("Set New Price: ");
-                    double p = in.nextDouble();
-                    System.out.print("Set New Quantity: ");
-                    int q = in.nextInt();
-                    updateP(n, p, q);
-                }
-                if (choice == 2) {
-                    System.out.print("Enter Category: ");
-                    String c = in.next();
-                    System.out.print("Enter Product Name: ");
-                    String n = in.next();
-                    System.out.print("Set Price: ");
-                    double p = in.nextDouble();
-                    System.out.print("Set Quantity: ");
-                    int q = in.nextInt();
-                    addP(c, n, p, q);
-                }
-                if (choice == 3) {
-                    System.out.println("All Products:");
-                    ViewAll();
-                }
-                if (choice == 4) {
-                    System.out.println("**Hello Admin**");
-                    System.out.print("Enter Product Name to Remove: ");
-                    String n = in.next();
-                    removeP(n);
-                }
-            }
-
-            if (choice == 5) {
-                System.out.println("**Hello Customer**");
-                System.out.print("Enter Product Name: ");
-                String n = in.next();
-                double q = isProductAvailable(n);
-                if (q != 0) {
-                    System.out.println("Product is available! Quantity: " + (int) q);
+            System.out.print("🔸 Choose your role: ");
+            try {
+                userType = in.nextInt();
+                if (userType == 1 || userType == 2) {
+                    break;
                 } else {
-                    System.out.println("Product is not available.");
+                    System.out.println("❌ Invalid choice. Please enter 1 for Admin or 2 for Customer.");
                 }
-            }
-
-            if (choice == 6) {
-                System.out.println("**Hello Customer**");
-                System.out.print("View All Products? (y/n): ");
-                String s = in.next();
-                if (s.equalsIgnoreCase("y")) {
-                    ViewAll();
-                }
-                System.out.print("Enter Product Name: ");
-                String n = in.next();
-                System.out.print("Enter Quantity: ");
-                int qu = in.nextInt();
-                double q = isProductAvailable(n);
-                if (q != 0) {
-                    addToCart(n, qu);
-                } else {
-                    System.out.println("Product is not available.");
-                }
-            }
-
-            if (choice == 7) {
-                System.out.println("**Your Cart**");
-                ViewCart();
-                System.out.print("Enter Product Name to Remove: ");
-                String n = in.next();
-                removeFromCart(n);
-            }
-
-            if (choice == 8) {
-                System.out.println("**Your Cart**");
-                ViewCart();
-            }
-
-            if (choice == 9) {
-                System.out.println("**Checkout**");
-                double total = calculateTotal();
-                System.out.println("Total: " + total);
-            }
-
-            if (choice == 0) {
-                System.out.println("Exiting...");
-                break;
+            } catch (Exception e) {
+                System.out.println("❌ Invalid input. Please enter a number.");
+                in.nextLine();
             }
         }
 
+        in.nextLine();
+        System.out.print("🔹 Enter Your Name: ");
+        String username = in.nextLine();
 
+        boolean isAdmin = userType == 1 && username.equals("Amr Khaled");
+
+        if (userType == 1 && !isAdmin) {
+            System.out.println("❌ Access Denied! You are not an Admin.");
+            return;
+        }
+
+        while (true) {
+            if (isAdmin) {
+                while (true) {
+                    System.out.println("\n🔹 Admin Panel 🔹");
+                    System.out.println("1️⃣ Add Product ");
+                    System.out.println("2️⃣ Update Product ");
+                    System.out.println("3️⃣ View All Products");
+                    System.out.println("4️⃣ Remove Product");
+                    System.out.println("5️⃣ Exit to Main Menu");
+
+                    int choice;
+                    while (true) {
+                        System.out.print("🔸 Choose an option: ");
+                        try {
+                            choice = in.nextInt();
+                            if (choice >= 1 && choice <= 5) break;
+                            else System.out.println("❌ Invalid choice. Please select a valid option.");
+                        } catch (Exception e) {
+                            System.out.println("❌ Invalid input. Please enter a number.");
+                            in.nextLine();
+                        }
+                    }
+
+                    if (choice == 1) {
+                        System.out.println("**Hello Admin**");
+                        System.out.print("Enter Category: ");
+                        String c = in.next();
+                        System.out.print("Enter Product Name: ");
+                        String n = in.next();
+
+                        double p;
+                        while (true) {
+                            System.out.print("Set Price: ");
+                            try {
+                                p = in.nextDouble();
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("❌ Invalid input. Please enter a valid price.");
+                                in.nextLine();
+                            }
+                        }
+
+                        int q;
+                        while (true) {
+                            System.out.print("Set Quantity: ");
+                            try {
+                                q = in.nextInt();
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("❌ Invalid input. Please enter a valid quantity.");
+                                in.nextLine();
+                            }
+                        }
+
+                        addP(c, n, p, q);
+                    } else if (choice == 2) {
+                        System.out.print("Enter Product Name to Update: ");
+                        String n = in.next();
+
+                        double p;
+                        while (true) {
+                            System.out.print("Set New Price: ");
+                            try {
+                                p = in.nextDouble();
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("❌ Invalid input. Please enter a valid price.");
+                                in.nextLine();
+                            }
+                        }
+
+                        int q;
+                        while (true) {
+                            System.out.print("Set New Quantity: ");
+                            try {
+                                q = in.nextInt();
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("❌ Invalid input. Please enter a valid quantity.");
+                                in.nextLine();
+                            }
+                        }
+
+                        updateP(n, p, q);
+                    } else if (choice == 3) {
+                        ViewAll();
+                    } else if (choice == 4) {
+                        System.out.print("Enter Product Name to Remove: ");
+                        String n = in.next();
+                        removeP(n);
+                    } else if (choice == 5) {
+                        System.out.println("Returning to Main Menu...");
+                        break;
+                    }
+                }
+            } else {
+                while (true) {
+                    System.out.println("\n🔹 Customer Menu 🔹");
+                    System.out.println("1️⃣ View All Products");
+                    System.out.println("2️⃣ Check Product Availability ");
+                    System.out.println("3️⃣ Add to Cart ");
+                    System.out.println("4️⃣ Remove from Cart ");
+                    System.out.println("5️⃣ View Your Cart ");
+                    System.out.println("6️⃣ Calculate Total ");
+                    System.out.println("7️⃣ Exit");
+
+                    int choice;
+                    while (true) {
+                        System.out.print("🔸 Choose an option: ");
+                        try {
+                            choice = in.nextInt();
+                            if (choice >= 1 && choice <= 7) break;
+                            else System.out.println("❌ Invalid choice. Please select a valid option.");
+                        } catch (Exception e) {
+                            System.out.println("❌ Invalid input. Please enter a number.");
+                            in.nextLine();
+                        }
+                    }
+
+                    if (choice == 1) {
+                        ViewAll();
+                    } else if (choice == 2) {
+                        System.out.print("Enter Product Name: ");
+                        String n = in.next();
+                        double q = isProductAvailable(n);
+                        System.out.println(q != 0 ? "Product is available! Quantity: " + (int) q : "Product is not available.");
+                    } else if (choice == 3) {
+                        System.out.print("Enter Product Name: ");
+                        String n = in.next();
+
+                        int qu;
+                        while (true) {
+                            System.out.print("Enter Quantity: ");
+                            try {
+                                qu = in.nextInt();
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("❌ Invalid input. Please enter a valid quantity.");
+                                in.nextLine();
+                            }
+                        }
+
+                        double q = isProductAvailable(n);
+                        if (q != 0) {
+                            addToCart(n, qu);
+                        } else {
+                            System.out.println("Product is not available.");
+                        }
+                    } else if (choice == 4) {
+                        System.out.print("Enter Product Name to Remove: ");
+                        String n = in.next();
+                        removeFromCart(n);
+                    } else if (choice == 5) {
+                        ViewCart();
+                    } else if (choice == 6) {
+                        System.out.println("Total: " + calculateTotal());
+                    } else if (choice == 7) {
+                        System.out.println("Exiting...");
+                        System.exit(0);
+                    }
+                }
+            }
+        }
     }
 }
